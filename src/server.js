@@ -18,5 +18,5 @@ let port = process.env.PORT || 6969;
 // if port === undefined => port = 6969
 
 app.listen(port, () => {
-    console.log(`backend nodejs is running on port ${port}`)
+    console.log(`BackEnd nodejs is running on port ${port}`)
 })
