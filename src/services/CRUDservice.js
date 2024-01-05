@@ -33,15 +33,55 @@ let createNewUser = async (data) => {
             reject(error)
         }
     })
-
-
 }
 
 let getAllUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let users = await db.User.findAll({ raw: true })
+            let users = await db.User.findAll({  // select * from user
+                raw: true
+            })
             resolve(users)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+let getUserInfoById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({  // select * from user where id = userId
+                where: { id: userId },
+                raw: true
+            })
+            if (user) {
+                resolve(user)
+            }
+            else {
+                resolve({})
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+let updateUserData = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.User.update(
+                {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address
+                },
+                {
+                    where: { id: data.id }
+                }
+            );
+            let allUsers = await db.User.findAll()
+            resolve(allUsers)
         } catch (error) {
             reject(error)
         }
@@ -51,4 +91,6 @@ let getAllUser = () => {
 module.exports = {
     createNewUser: createNewUser,
     getAllUser: getAllUser,
+    getUserInfoById: getUserInfoById,
+    updateUserData: updateUserData
 }

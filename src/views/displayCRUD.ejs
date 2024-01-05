@@ -13,37 +13,34 @@
 </head>
 
 <body>
-    <table class="table table-hover container">
+    <table class="table table-hover container table-bordered mt-3">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Email</th>
-                <th scope="col">First name</th>
-                <th scope="col">Last name</th>
-                <th scope="col">Address</th>
-                <th scope="col">Gender</th>
+                <th class="text-center" scope="col">Email</th>
+                <th class="text-center" scope="col">First name</th>
+                <th class="text-center" scope="col">Last name</th>
+                <th class="text-center" scope="col">Address</th>
+                <th class="text-center" scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             <% for(let i=0; i < dataUser.length; i++) { %>
                 <tr>
-                    <td>
-                        <%= dataUser[i].id %>
-                    </td>
-                    <td>
+                    <td class="text-center">
                         <%= dataUser[i].email %>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <%= dataUser[i].firstName %>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <%= dataUser[i].lastName %>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <%= dataUser[i].address %>
                     </td>
-                    <td>
-                        <%= dataUser[i].gender %>
+                    <td class="text-center">
+                        <a href="/edit-crud?id=<%=dataUser[i].id%>" class="btn btn-warning me-2">Edit</a>
+                        <a class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 <% } %>
