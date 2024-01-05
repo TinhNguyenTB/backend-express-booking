@@ -9,6 +9,17 @@ let getHomePage = async (req, res) => {
     }
 }
 
+let getCRUD = (req, res) => {
+    return res.render('crud.ejs');
+}
+
+let postCRUD = (req, res) => {
+    console.log(req.body)
+    return res.send('post crud from server');
+}
+
 module.exports = {
     getHomePage: getHomePage,
+    getCRUD: getCRUD,
+    postCRUD: postCRUD,
 }
