@@ -32,7 +32,6 @@ let handleUserLogin = (email, password) => {
                     userData.errCode = 2;
                     userData.errMessage = `User not found`;
                 }
-
             }
             else {
                 userData.errCode = 1;
@@ -63,7 +62,34 @@ let checkUserEmail = (userEmail) => {
     })
 }
 
+let getAllUsers = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = ''
+            if (userId === 'ALL') {
+                users = await db.User.findAll({
+                    attributes: {
+                        exclude: ['password']  // did not get password
+                    }
+                })
+            }
+            if (userId && userId !== 'ALL') {
+                users = await db.User.findOne({
+                    where: { id: userId },
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+            }
+            resolve(users)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     handleUserLogin: handleUserLogin,
+    getAllUsers: getAllUsers
 
 }
