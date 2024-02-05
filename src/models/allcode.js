@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {  // 1 allcode - n user
             Allcode.hasMany(models.User, { foreignKey: 'positionId', as: 'positionData' })
             Allcode.hasMany(models.User, { foreignKey: 'gender', as: 'genderData' })
+            Allcode.hasMany(models.Schedule, { foreignKey: 'timeType', as: 'timeTypeData' })
         }
     };
     Allcode.init({
