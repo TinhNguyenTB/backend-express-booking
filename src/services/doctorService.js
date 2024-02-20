@@ -290,6 +290,56 @@ let getExtraInforDoctorById = async (doctorId) => {
     })
 }
 
+let getProfileDoctorById = async (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            }
+            else {
+                let data = await db.User.findOne({
+                    where: { id: doctorId },
+                    attributes: {
+                        exclude: ['password']  // not get password
+                    },
+                    include: [
+                        { model: db.Markdown, attributes: ['description', 'contentHTML', 'contentMarkdown'] },
+                        { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                        {
+                            model: db.Doctor_Infor,
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            },
+                            include: [
+                                { model: db.Allcode, as: 'priceData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.Allcode, as: 'paymentData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] }
+                            ]
+                        },
+                    ],
+                    raw: false,
+                    nest: true
+                })
+                if (data && data.image) {
+                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                }
+                if (!data) {
+                    data = {}
+                }
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -297,5 +347,6 @@ module.exports = {
     getDetailDoctorById,
     bulkCreateSchedule,
     getScheduleByDate,
-    getExtraInforDoctorById
+    getExtraInforDoctorById,
+    getProfileDoctorById
 }
