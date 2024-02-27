@@ -8,7 +8,7 @@ const postBookingAppointment = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errCode: -1,
-            errMessage: 'Error get getProfileDoctorById from server'
+            errMessage: 'Error postBookingAppointment from server'
         })
     }
 }

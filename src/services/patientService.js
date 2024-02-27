@@ -1,5 +1,5 @@
 import db from "../models/index"
-
+import emailService from '../services/emailService';
 
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -11,6 +11,15 @@ const postBookingAppointment = (data) => {
                 })
             }
             else {
+                await emailService.sendSimpleEmail({
+                    receiverEmail: data.email,
+                    patientName: 'Patient',
+                    time: '8:00 - 9:00 Thứ 3 27/2/2024',
+                    doctorName: 'Tran Duy Hung',
+                    redirectLink: 'http://localhost:3000/'
+
+                });
+
                 let [user, created] = await db.User.findOrCreate({
                     where: { email: data.email },
                     defaults: {
