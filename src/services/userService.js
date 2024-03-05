@@ -27,7 +27,7 @@ let handleUserLogin = (email, password) => {
                     }
                     else {
                         userData.errCode = 3
-                        userData.errMessage = 'Wrong password';
+                        userData.errMessage = 'Your email or password is incorrect!';
                     }
                 }
                 else {
@@ -37,7 +37,7 @@ let handleUserLogin = (email, password) => {
             }
             else {
                 userData.errCode = 1;
-                userData.errMessage = `Your email does not exist in the system. Please try another email.`
+                userData.errMessage = 'Your email or password is incorrect!';
             }
             resolve(userData)
         } catch (error) {
