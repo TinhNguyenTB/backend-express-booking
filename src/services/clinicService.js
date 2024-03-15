@@ -24,10 +24,67 @@ const createClinic = (data) => {
             }
         } catch (error) {
             console.log(error);
+            reject(error);
         }
     })
 }
 
+const getAllClinic = async () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Clinic.findAll();
+            if (data && data.length > 0) {
+                data.map(item => {
+                    item.image = new Buffer(item.image, 'base64').toString('binary');
+                    return item;
+                })
+            }
+            resolve({
+                errCode: 0,
+                errMessage: 'Ok',
+                data
+            })
+
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    })
+}
+
+const getDetailClinicById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            }
+            else {
+                let data = await db.Clinic.findOne({
+                    where: { id: id },
+                    attributes: ['descriptionHTML', 'name', 'address'],
+                    include: [
+                        { model: db.Doctor_Infor, attributes: ['doctorId'] },
+                    ],
+                    raw: false,
+                    nest: true
+                })
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Ok',
+                    data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    })
+}
+
+
 module.exports = {
-    createClinic
+    createClinic, getAllClinic, getDetailClinicById
 }

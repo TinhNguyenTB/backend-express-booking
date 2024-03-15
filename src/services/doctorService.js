@@ -53,7 +53,7 @@ let getAllDoctor = () => {
 const checkRequiredFileds = (inputData) => {
     let arrFileds = ['doctorId', 'contentHTML', 'contentMarkdown', 'action',
         'selectedPrice', 'selectedPayment', 'selectedProvince',
-        'nameClinic', 'addressClinic', 'note', 'specialtyId'
+        'note', 'specialtyId', 'clinicId'
     ]
     let isValid = true;
     let element = '';
@@ -114,8 +114,6 @@ let saveDetailInforDoctor = (inputData) => {
                     doctorInfor.priceId = inputData.selectedPrice;
                     doctorInfor.provinceId = inputData.selectedProvince;
                     doctorInfor.paymentId = inputData.selectedPayment;
-                    doctorInfor.nameClinic = inputData.nameClinic;
-                    doctorInfor.addressClinic = inputData.addressClinic;
                     doctorInfor.note = inputData.note;
                     doctorInfor.specialtyId = inputData.specialtyId;
                     doctorInfor.clinicId = inputData.clinicId
@@ -128,8 +126,6 @@ let saveDetailInforDoctor = (inputData) => {
                         priceId: inputData.selectedPrice,
                         provinceId: inputData.selectedProvince,
                         paymentId: inputData.selectedPayment,
-                        nameClinic: inputData.nameClinic,
-                        addressClinic: inputData.addressClinic,
                         specialtyId: inputData.specialtyId,
                         clinicId: inputData.clinicId,
                         note: inputData.note
@@ -295,7 +291,8 @@ let getExtraInforDoctorById = async (doctorId) => {
                     include: [
                         { model: db.Allcode, as: 'priceData', attributes: ['valueEn', 'valueVi'] },
                         { model: db.Allcode, as: 'paymentData', attributes: ['valueEn', 'valueVi'] },
-                        { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] }
+                        { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.Clinic, attributes: ['name', 'address'] }
                     ],
                     raw: false,
                     nest: true

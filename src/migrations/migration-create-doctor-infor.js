@@ -30,14 +30,6 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING
             },
-            addressClinic: {
-                allowNull: false,
-                type: Sequelize.STRING
-            },
-            nameClinic: {
-                allowNull: false,
-                type: Sequelize.STRING
-            },
             note: {
                 type: Sequelize.STRING
             },

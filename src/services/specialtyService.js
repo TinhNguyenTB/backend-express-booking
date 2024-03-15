@@ -62,7 +62,7 @@ const getDetailSpecialtyById = async (id, location) => {
             else {
                 let data = await db.Specialty.findOne({
                     where: { id: id },
-                    attributes: ['descriptionHTML', 'descriptionMarkdown']
+                    attributes: ['descriptionHTML'],
                 })
                 if (data) {
                     let doctorSpecialty = [];
