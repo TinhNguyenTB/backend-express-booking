@@ -11,7 +11,9 @@ let buildUrlEmail = (doctorId, token) => {
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.doctorId || !data.date || !data.timeType || !data.fullName) {
+            if (!data.email || !data.doctorId || !data.date || !data.timeType || !data.fullName
+                || !data.selectedGender || !data.address || !data.phoneNumber
+            ) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter!'
@@ -26,24 +28,26 @@ const postBookingAppointment = (data) => {
                     doctorName: data.doctorName,
                     language: data.language,
                     redirectLink: buildUrlEmail(data.doctorId, token)
-
                 });
 
-                let [user, created] = await db.User.findOrCreate({
+                let [patient, created] = await db.Patient.findOrCreate({
                     where: { email: data.email },
                     defaults: {
                         email: data.email,
-                        roleId: 'R3'
+                        fullName: data.fullName,
+                        address: data.address,
+                        phonenumber: data.phoneNumber,
+                        gender: data.selectedGender
                     }
                 })
                 // create a booking record
-                if (user) {
+                if (patient) {
                     await db.Booking.findOrCreate({
-                        where: { patientId: user.id },
+                        where: { patientId: patient.id },
                         defaults: {
                             statusId: 'S1',
                             doctorId: data.doctorId,
-                            patientId: user.id,
+                            patientId: patient.id,
                             date: data.date,
                             timeType: data.timeType,
                             token: token
