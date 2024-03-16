@@ -8,28 +8,37 @@ let buildUrlEmail = (doctorId, token) => {
     return result;
 }
 
+const checkRequiredFileds = (inputData) => {
+    let arrFileds = ['email', 'doctorId', 'date', 'timeType',
+        'fullName', 'selectedGender', 'address',
+        'phoneNumber']
+
+    let isValid = true;
+    let element = '';
+    for (let i = 0; i < arrFileds.length; i++) {
+        if (!inputData[arrFileds[i]]) {
+            isValid = false;
+            element = arrFileds[i]
+            break;
+        }
+    }
+    return {
+        isValid,
+        element
+    }
+}
+
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.doctorId || !data.date || !data.timeType || !data.fullName
-                || !data.selectedGender || !data.address || !data.phoneNumber
-            ) {
+            let check = checkRequiredFileds(data);
+            if (check.isValid === false) {
                 resolve({
                     errCode: 1,
-                    errMessage: 'Missing required parameter!'
+                    errMessage: `Missing required parameter ${check.element}`
                 })
             }
             else {
-                let token = uuidv4();
-                await emailService.sendSimpleEmail({
-                    receiverEmail: data.email,
-                    patientName: data.fullName,
-                    time: data.timeString,
-                    doctorName: data.doctorName,
-                    language: data.language,
-                    redirectLink: buildUrlEmail(data.doctorId, token)
-                });
-
                 let [patient, created] = await db.Patient.findOrCreate({
                     where: { email: data.email },
                     defaults: {
@@ -41,8 +50,9 @@ const postBookingAppointment = (data) => {
                     }
                 })
                 // create a booking record
+                let token = uuidv4();
                 if (patient) {
-                    await db.Booking.findOrCreate({
+                    let [appointment, created] = await db.Booking.findOrCreate({
                         where: { patientId: patient.id },
                         defaults: {
                             statusId: 'S1',
@@ -53,10 +63,24 @@ const postBookingAppointment = (data) => {
                             token: token
                         }
                     })
+                    if (created) {
+                        await emailService.sendSimpleEmail({
+                            receiverEmail: data.email,
+                            patientName: data.fullName,
+                            time: data.timeString,
+                            doctorName: data.doctorName,
+                            language: data.language,
+                            redirectLink: buildUrlEmail(data.doctorId, token)
+                        });
+                        resolve({
+                            errCode: 0,
+                            errMessage: "Create booking appointment succcessfully!"
+                        })
+                    }
                 }
                 resolve({
-                    errCode: 0,
-                    errMessage: "Save info patient succcessfully!"
+                    errCode: 2,
+                    errMessage: "Save info patient failed!"
                 })
             }
         } catch (error) {

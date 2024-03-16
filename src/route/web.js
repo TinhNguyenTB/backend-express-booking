@@ -1,5 +1,4 @@
 import express from "express";
-import homeController from "../controllers/homeController";
 import userController from '../controllers/userController';
 import doctorController from '../controllers/doctorController';
 import patientController from '../controllers/patientController';
@@ -9,13 +8,7 @@ import clinicController from '../controllers/clinicController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-    router.get('/', homeController.getHomePage);
-    router.get('/crud', homeController.getCRUD);
-    router.post('/post-crud', homeController.postCRUD);
-    router.get('/get-crud', homeController.displayGetCRUD);
-    router.get('/edit-crud', homeController.getEditCRUD);
-    router.post('/put-crud', homeController.putCRUD);
-    router.get('/delete-crud', homeController.deleteCRUD);
+
 
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
