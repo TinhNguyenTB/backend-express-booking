@@ -13,6 +13,9 @@ let sendSimpleEmail = async (dataSend) => {
             user: process.env.EMAIL_APP,
             pass: process.env.EMAIL_APP_PASSWORD,
         },
+        tls: {
+            rejectUnauthorized: false // Bỏ qua kiểm tra chứng chỉ
+        }
 
     });
 
