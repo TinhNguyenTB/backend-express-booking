@@ -2,6 +2,7 @@ import e from "express";
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
 const salt = bcrypt.genSaltSync(10);
+import { createJWT } from '../middleware/jwtActions'
 
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -34,7 +35,9 @@ let handleUserLogin = (email, password) => {
                         userData.errMessage = 'Ok';
                         // console.log(user)
                         delete user.password;
+                        let token = createJWT(user)
                         userData.user = user;
+                        userData.token = token;
                     }
                     else {
                         userData.errCode = 3

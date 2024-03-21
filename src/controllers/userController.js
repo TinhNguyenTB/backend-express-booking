@@ -1,23 +1,24 @@
 import userService from '../services/userService'
 
 let handleLogin = async (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
+    let { email, password } = req.body;
     // check email exist
     if (!email || !password) {
         return res.status(500).json({
             errCode: 1,
-            message: "Missing inputs parameter"
+            message: "Missing required parameter"
         })
     }
 
     let userData = await userService.handleUserLogin(email, password)
-    //console.log(userData);
+    if (userData && userData.token) {
+        res.cookie("token", userData.token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+    }
 
     return res.status(200).json({
         errCode: userData.errCode,
         message: userData.errMessage,
-        user: userData.user ? userData.user : {}
+        user: userData ? userData : {}
     })
 }
 
@@ -78,10 +79,10 @@ let getAllCode = async (req, res) => {
 }
 
 module.exports = {
-    handleLogin: handleLogin,
-    handleGetAllUsers: handleGetAllUsers,
-    handleCreateNewUser: handleCreateNewUser,
-    handleEditUser: handleEditUser,
-    handleDeleteUser: handleDeleteUser,
-    getAllCode: getAllCode
+    handleLogin,
+    handleGetAllUsers,
+    handleCreateNewUser,
+    handleEditUser,
+    handleDeleteUser,
+    getAllCode
 }
