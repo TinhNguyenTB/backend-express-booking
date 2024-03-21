@@ -2,7 +2,6 @@ import userService from '../services/userService'
 
 let handleLogin = async (req, res) => {
     let { email, password } = req.body;
-    // check email exist
     if (!email || !password) {
         return res.status(500).json({
             errCode: 1,
@@ -16,9 +15,9 @@ let handleLogin = async (req, res) => {
     }
 
     return res.status(200).json({
-        errCode: userData.errCode,
-        message: userData.errMessage,
-        user: userData ? userData : {}
+        errCode: 0,
+        errMessage: 'Ok',
+        data: userData ? userData : {}
     })
 }
 
@@ -78,11 +77,23 @@ let getAllCode = async (req, res) => {
     }
 }
 
+const getUserAccount = (req, res) => {
+    return res.status(200).json({
+        errMessage: 'Ok',
+        errCode: 0,
+        data: {
+            access_token: req.token,
+            user: req.user,
+        }
+    })
+}
+
 module.exports = {
     handleLogin,
     handleGetAllUsers,
     handleCreateNewUser,
     handleEditUser,
     handleDeleteUser,
-    getAllCode
+    getAllCode,
+    getUserAccount
 }

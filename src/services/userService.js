@@ -31,12 +31,9 @@ let handleUserLogin = (email, password) => {
                     //compare password with password in db
                     let check = await bcrypt.compareSync(password, user.password)
                     if (check) {
-                        userData.errCode = 0;
-                        userData.errMessage = 'Ok';
-                        // console.log(user)
                         delete user.password;
-                        let token = createJWT(user)
                         userData.user = user;
+                        let token = createJWT(user)
                         userData.token = token;
                     }
                     else {

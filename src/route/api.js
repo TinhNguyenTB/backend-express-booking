@@ -3,12 +3,15 @@ import userController from '../controllers/userController';
 import doctorController from '../controllers/doctorController';
 import specialtyController from '../controllers/specialtyController';
 import clinicController from '../controllers/clinicController';
+import { checkUserJWT } from '../middleware/jwtActions';
 
 let router = express.Router();
 
 let initApiRoutes = (app) => {
+    router.all("*", checkUserJWT)
 
     router.post('/api/login', userController.handleLogin);
+    router.get('/api/account', userController.getUserAccount)
     router.get('/api/get-all-users', userController.handleGetAllUsers);
     router.post('/api/create-new-user', userController.handleCreateNewUser);
     router.put('/api/edit-user', userController.handleEditUser);
