@@ -11,7 +11,7 @@ let buildUrlEmail = (doctorId, token) => {
 const checkRequiredFileds = (inputData) => {
     let arrFileds = ['email', 'doctorId', 'date', 'timeType',
         'fullName', 'selectedGender', 'address',
-        'phoneNumber']
+        'phoneNumber', 'reason']
 
     let isValid = true;
     let element = '';
@@ -69,6 +69,7 @@ const postBookingAppointment = (data) => {
                             patientName: data.fullName,
                             time: data.timeString,
                             doctorName: data.doctorName,
+                            reason: data.reason,
                             language: data.language,
                             redirectLink: buildUrlEmail(data.doctorId, token)
                         });

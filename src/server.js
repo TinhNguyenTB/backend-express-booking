@@ -24,7 +24,8 @@ viewEngine(app);
 initWebRoutes(app);
 initApiRoutes(app);
 
-connectDB();
+// test connect
+// connectDB();
 
 const port = process.env.PORT || 6969;
 

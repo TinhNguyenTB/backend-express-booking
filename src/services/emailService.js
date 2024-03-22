@@ -95,6 +95,10 @@ const getBodyHTMLEmail = (dataSend) => {
             <b>Thời gian: ${dataSend.time}</b>
         </div>
         <div>
+            <b>Lý do khám bệnh:</b>
+            <div>${dataSend.reason}</div>
+        </div>
+        <div>
             <b>Bác sĩ: ${dataSend.doctorName}</b>
         </div>
         <p>Nếu các thông tin trên là đúng sự thật, vui lòng click vào đường link bên dưới
@@ -115,6 +119,10 @@ const getBodyHTMLEmail = (dataSend) => {
         <p>Information on scheduling medical examinations:</p>
         <div>
             <b>Time: ${dataSend.time}</b>
+        </div>
+        <div>
+            <b>Reason for medical examination:</b>
+            <div>${dataSend.reason}</div>
         </div>
         <div>
             <b>Doctor: ${dataSend.doctorName}</b>
