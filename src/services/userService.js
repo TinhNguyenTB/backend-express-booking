@@ -75,7 +75,7 @@ let checkUserEmail = (userEmail) => {
     })
 }
 
-let getAllUsers = (userId) => {
+const getAllUsers = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let users = ''
@@ -101,7 +101,7 @@ let getAllUsers = (userId) => {
     })
 }
 
-let createNewUser = (data) => {
+const createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Check email exists
@@ -139,7 +139,7 @@ let createNewUser = (data) => {
     })
 }
 
-let deleteUser = (userId) => {
+const deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
@@ -164,7 +164,7 @@ let deleteUser = (userId) => {
     })
 }
 
-let updateUserData = (data) => {
+const updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id || !data.roleId || !data.positionId || !data.gender) {
@@ -208,7 +208,7 @@ let updateUserData = (data) => {
     })
 }
 
-let getAllCodeService = (typeInput) => {
+const getAllCodeService = (typeInput) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!typeInput) {
@@ -239,5 +239,5 @@ module.exports = {
     createNewUser: createNewUser,
     deleteUser: deleteUser,
     updateUserData: updateUserData,
-    getAllCodeService: getAllCodeService
+    getAllCodeService: getAllCodeService,
 }

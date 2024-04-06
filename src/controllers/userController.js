@@ -1,67 +1,102 @@
 import userService from '../services/userService'
 
 let handleLogin = async (req, res) => {
-    let { email, password } = req.body;
-    if (!email || !password) {
+    try {
+        let { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(500).json({
+                errCode: 1,
+                message: "Missing required parameter"
+            })
+        }
+        let userData = await userService.handleUserLogin(email, password)
+        if (userData && userData.token) {
+            res.cookie("token", userData.token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+        }
+        return res.status(200).json({
+            errCode: 0,
+            errMessage: 'Ok',
+            data: userData ? userData : {}
+        })
+    } catch (error) {
+        console.log(error);
         return res.status(500).json({
-            errCode: 1,
-            message: "Missing required parameter"
+            errCode: -1,
+            errMessage: 'Error from server'
         })
     }
-
-    let userData = await userService.handleUserLogin(email, password)
-    if (userData && userData.token) {
-        res.cookie("token", userData.token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
-    }
-
-    return res.status(200).json({
-        errCode: 0,
-        errMessage: 'Ok',
-        data: userData ? userData : {}
-    })
 }
 
-let handleGetAllUsers = async (req, res) => {
-    let id = req.query.id; // ALL, id
-    if (!id) {
+const handleGetAllUsers = async (req, res) => {
+    try {
+        let id = req.query.id; // ALL, id
+        if (!id) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: 'Missing required parameters',
+                users: []
+            })
+        }
+
+        let users = await userService.getAllUsers(id)
         return res.status(200).json({
-            errCode: 1,
-            errMessage: 'Missing required parameters',
-            users: []
+            errCode: 0,
+            errMessage: 'Ok',
+            users
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
         })
     }
-
-    let users = await userService.getAllUsers(id)
-    //console.log(users)
-
-    return res.status(200).json({
-        errCode: 0,
-        errMessage: 'Ok',
-        users
-    })
 }
 
 let handleCreateNewUser = async (req, res) => {
-    let message = await userService.createNewUser(req.body);
-    //console.log(message)
-    return res.status(200).json(message)
+    try {
+        let message = await userService.createNewUser(req.body);
+        return res.status(200).json(message)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
 }
 
 let handleEditUser = async (req, res) => {
-    let data = req.body;
-    let message = await userService.updateUserData(data);
-    return res.status(200).json(message)
+    try {
+        let data = req.body;
+        let message = await userService.updateUserData(data);
+        return res.status(200).json(message)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
 }
 
 let handleDeleteUser = async (req, res) => {
-    if (!req.body.id) {
-        return res.status(200).json({
-            errCode: 1,
-            errMessage: 'Missing required parameters'
+    try {
+        if (!req.body.id) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: 'Missing required parameters'
+            })
+        }
+        let message = await userService.deleteUser(req.body.id);
+        return res.status(200).json(message)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
         })
     }
-    let message = await userService.deleteUser(req.body.id);
-    return res.status(200).json(message)
 }
 
 let getAllCode = async (req, res) => {
@@ -69,23 +104,47 @@ let getAllCode = async (req, res) => {
         let data = await userService.getAllCodeService(req.query.type);
         return res.status(200).json(data)
     } catch (error) {
-        console.log('Get allcode error:', error)
-        return res.status(200).json({
+        console.log(error)
+        return res.status(500).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
     }
 }
 
+const handleLogout = (req, res) => {
+    try {
+        res.clearCookie("token");
+        return res.status(200).json({
+            errCode: 0,
+            errMessage: 'Ok'
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'error from server'
+        })
+    }
+}
+
 const getUserAccount = (req, res) => {
-    return res.status(200).json({
-        errMessage: 'Ok',
-        errCode: 0,
-        data: {
-            access_token: req.token,
-            user: req.user,
-        }
-    })
+    try {
+        return res.status(200).json({
+            errMessage: 'Ok',
+            errCode: 0,
+            data: {
+                access_token: req.token,
+                user: req.user,
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'error from server'
+        })
+    }
 }
 
 module.exports = {
@@ -95,5 +154,6 @@ module.exports = {
     handleEditUser,
     handleDeleteUser,
     getAllCode,
-    getUserAccount
+    getUserAccount,
+    handleLogout
 }
