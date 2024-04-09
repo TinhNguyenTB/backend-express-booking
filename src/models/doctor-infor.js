@@ -26,8 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         priceId: DataTypes.STRING,
         provinceId: DataTypes.STRING,
         paymentId: DataTypes.STRING,
-        note: DataTypes.STRING,
-        count: DataTypes.INTEGER
+        note: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'Doctor_Infor',

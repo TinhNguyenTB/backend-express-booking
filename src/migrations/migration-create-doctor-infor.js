@@ -33,11 +33,6 @@ module.exports = {
             note: {
                 type: Sequelize.STRING
             },
-            count: {
-                allowNull: false,
-                defaultValue: 0,
-                type: Sequelize.INTEGER
-            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE

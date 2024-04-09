@@ -204,31 +204,10 @@ let bulkCreateSchedule = (data) => {
                 })
             }
             else {
-                let schedule = data.arrSchedule;
-                if (schedule && schedule.length > 0) {
-                    schedule = schedule.map(item => {
-                        item.maxNumber = MAX_SCHEDULE_NUMBER
-                        return item;
-                    })
-                }
-                // get all existing data
-                let existing = await db.Schedule.findAll(
-                    {
-                        where: { doctorId: data.doctorId, date: data.formatedDate },
-                        attributes: ['timeType', 'date', 'doctorId', 'maxNumber'],
-                        raw: true
-                    }
-                )
-
-                // compare different
-                let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-                    return a.timeType === b.timeType && +a.date === +b.date; // a belong to schedule, b belong to existing
+                await db.Schedule.destroy({
+                    where: { doctorId: data.doctorId, date: data.formatedDate }
                 })
-                // console.log('check diff:', toCreate)
-                // create data
-                if (toCreate && toCreate.length > 0) {
-                    await db.Schedule.bulkCreate(toCreate)
-                }
+                await db.Schedule.bulkCreate(data.arrSchedule)
                 resolve({
                     errCode: 0,
                     message: 'Ok'

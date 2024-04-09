@@ -1,7 +1,8 @@
 module.exports = {
     up: (queryInterface, Sequelize) => {
         return Promise.all([
-            queryInterface.removeColumn('Doctor_Infor', 'count')
+            queryInterface.removeColumn('Schedules', 'currentNumber'),
+            queryInterface.removeColumn('Schedules', 'maxNumber')
         ]);
     },
 
