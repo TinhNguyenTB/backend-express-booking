@@ -60,7 +60,8 @@ const postBookingAppointment = (data) => {
                             patientId: patient.id,
                             date: data.date,
                             timeType: data.timeType,
-                            token: token
+                            token: token,
+                            reason: data.reason
                         }
                     })
                     if (created) {
