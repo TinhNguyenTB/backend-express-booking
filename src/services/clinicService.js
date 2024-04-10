@@ -84,7 +84,32 @@ const getDetailClinicById = (id) => {
     })
 }
 
+const deleteClinic = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let clinic = await db.Clinic.findOne({
+                where: { id: id }
+            })
+            if (!clinic) {
+                resolve({
+                    errCode: 2,
+                    errMessage: `Clinic does not exist`
+                })
+            }
+            await db.Clinic.destroy({
+                where: { id: id }
+            })
+            resolve({
+                errCode: 0,
+                message: `Clinic has been deleted`
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 module.exports = {
-    createClinic, getAllClinic, getDetailClinicById
+    createClinic, getAllClinic, getDetailClinicById,
+    deleteClinic
 }

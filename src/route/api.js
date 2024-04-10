@@ -27,6 +27,7 @@ let initApiRoutes = (app) => {
     router.post('/api/create-new-specialty', specialtyController.createSpecialty)
 
     router.post('/api/create-new-clinic', clinicController.createClinic)
+    router.delete('/api/delete-clinic', clinicController.deleteClinic);
 
     return app.use("/", router);
 }
