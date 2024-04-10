@@ -25,7 +25,7 @@ initWebRoutes(app);
 initApiRoutes(app);
 
 // test connect
-// connectDB();
+connectDB();
 
 const port = process.env.PORT || 6969;
 
