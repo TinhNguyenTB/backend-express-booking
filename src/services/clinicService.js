@@ -3,7 +3,7 @@ import db from "../models/index";
 const createClinic = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.name || !data.address || !data.imageBase64 || !data.descriptionMarkdown || !data.descriptionHTML) {
+            if (!data.name || !data.address || !data.image || !data.descriptionMarkdown || !data.descriptionHTML) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter!'
@@ -13,7 +13,7 @@ const createClinic = (data) => {
                 await db.Clinic.create({
                     name: data.name,
                     address: data.address,
-                    image: data.imageBase64,
+                    image: data.image,
                     descriptionMarkdown: data.descriptionMarkdown,
                     descriptionHTML: data.descriptionHTML
                 })
@@ -109,7 +109,47 @@ const deleteClinic = async (id) => {
     })
 }
 
+const editClinic = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.name || !data.address || !data.descriptionHTML || !data.descriptionMarkdown) {
+                resolve({
+                    errCode: 2,
+                    message: 'Missing required parameters!'
+                })
+            }
+            let clinic = await db.Clinic.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (clinic) {
+                clinic.name = data.name;
+                clinic.address = data.address;
+                clinic.descriptionHTML = data.descriptionHTML;
+                clinic.descriptionMarkdown = data.descriptionMarkdown;
+                if (data.image) {
+                    clinic.image = data.image;
+                }
+
+                await clinic.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Update clinic succeefully!'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    message: 'Update not found!'
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     createClinic, getAllClinic, getDetailClinicById,
-    deleteClinic
+    deleteClinic, editClinic
 }

@@ -6,7 +6,7 @@ const createClinic = async (req, res) => {
         return res.status(200).json(info)
     } catch (error) {
         console.log(error)
-        return res.status(200).json({
+        return res.status(500).json({
             errCode: -1,
             errMessage: 'Error createClinic from server'
         })
@@ -19,7 +19,7 @@ const getAllClinic = async (req, res) => {
         return res.status(200).json(info)
     } catch (error) {
         console.log(error)
-        return res.status(200).json({
+        return res.status(500).json({
             errCode: -1,
             errMessage: 'Error getAllClinic from server'
         })
@@ -32,7 +32,7 @@ const getDetailClinicById = async (req, res) => {
         return res.status(200).json(info)
     } catch (error) {
         console.log(error)
-        return res.status(200).json({
+        return res.status(500).json({
             errCode: -1,
             errMessage: 'Error getDetailClinicById from server'
         })
@@ -58,7 +58,21 @@ const deleteClinic = async (req, res) => {
     }
 }
 
+let editClinic = async (req, res) => {
+    try {
+        let data = req.body;
+        let message = await clinicService.editClinic(data);
+        return res.status(200).json(message)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     createClinic, getAllClinic, getDetailClinicById,
-    deleteClinic
+    deleteClinic, editClinic
 }

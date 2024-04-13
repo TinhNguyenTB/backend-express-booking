@@ -28,6 +28,7 @@ let initApiRoutes = (app) => {
 
     router.post('/api/create-new-clinic', clinicController.createClinic)
     router.delete('/api/delete-clinic', clinicController.deleteClinic);
+    router.put('/api/edit-clinic', clinicController.editClinic);
 
     return app.use("/", router);
 }
