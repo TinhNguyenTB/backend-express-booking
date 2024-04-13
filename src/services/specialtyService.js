@@ -96,6 +96,71 @@ const getDetailSpecialtyById = async (id, location) => {
     })
 }
 
+const deleteSpecialty = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let clinic = await db.Specialty.findOne({
+                where: { id: id }
+            })
+            if (!clinic) {
+                resolve({
+                    errCode: 2,
+                    errMessage: `Specialty does not exist`
+                })
+            }
+            await db.Specialty.destroy({
+                where: { id: id }
+            })
+            resolve({
+                errCode: 0,
+                message: `Specialty has been deleted`
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+const editSpecialty = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.name || !data.descriptionHTML || !data.descriptionMarkdown) {
+                resolve({
+                    errCode: 2,
+                    message: 'Missing required parameters!'
+                })
+            }
+            let specialty = await db.Specialty.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (specialty) {
+                specialty.name = data.name;
+                specialty.descriptionHTML = data.descriptionHTML;
+                specialty.descriptionMarkdown = data.descriptionMarkdown;
+                if (data.image) {
+                    specialty.image = data.image;
+                }
+
+                await specialty.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Update specialty succeefully!'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    message: 'Specialty not found!'
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
-    createSpecialty, getAllSpecialty, getDetailSpecialtyById
+    createSpecialty, getAllSpecialty, getDetailSpecialtyById,
+    deleteSpecialty, editSpecialty
 }
