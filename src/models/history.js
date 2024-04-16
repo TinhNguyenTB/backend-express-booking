@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     History.init({
         patientId: DataTypes.INTEGER,
         doctorId: DataTypes.INTEGER,
-        description: DataTypes.TEXT,
-        files: DataTypes.TEXT
+        reason: DataTypes.TEXT,
+        files: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'History',

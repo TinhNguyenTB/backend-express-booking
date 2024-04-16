@@ -178,7 +178,7 @@ let getDetailDoctorById = (inputId) => {
                     nest: true
                 })
                 if (data && data.image) {
-                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
                 }
                 if (!data) {
                     data = {}
@@ -325,7 +325,7 @@ let getProfileDoctorById = async (doctorId) => {
                     nest: true
                 })
                 if (data && data.image) {
-                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
                 }
                 if (!data) {
                     data = {}
@@ -395,7 +395,6 @@ const sendRemedy = (data) => {
                 })
             }
             else {
-                // update status booking
                 let appointment = await db.Booking.findOne({
                     where: {
                         doctorId: data.doctorId,
@@ -405,9 +404,17 @@ const sendRemedy = (data) => {
                     },
                     raw: false // false: obj of sequelize, true: obj of js
                 })
+                // save history
                 if (appointment) {
-                    appointment.statusId = 'S3'
-                    await appointment.save()
+                    await db.History.create({
+                        patientId: data.patientId,
+                        doctorId: data.doctorId,
+                        reason: data.reason,
+                        files: data.imgBase64
+                    })
+                    await db.Booking.destroy({
+                        where: { id: appointment.id }
+                    })
                 }
                 // send email remedy
                 emailService.sendAttachments(data)

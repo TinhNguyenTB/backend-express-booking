@@ -3,7 +3,7 @@ import db from "../models/index";
 const createSpecialty = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.name || !data.imageBase64 || !data.descriptionMarkdown || !data.descriptionHTML) {
+            if (!data.name || !data.image || !data.descriptionMarkdown || !data.descriptionHTML) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter!'
@@ -12,7 +12,7 @@ const createSpecialty = (data) => {
             else {
                 await db.Specialty.create({
                     name: data.name,
-                    image: data.imageBase64,
+                    image: data.image,
                     descriptionMarkdown: data.descriptionMarkdown,
                     descriptionHTML: data.descriptionHTML
                 })
@@ -33,7 +33,7 @@ const getAllSpecialty = () => {
             let data = await db.Specialty.findAll();
             if (data && data.length > 0) {
                 data.map(item => {
-                    item.image = new Buffer(item.image, 'base64').toString('binary');
+                    item.image = Buffer.from(item.image, 'base64').toString('binary');
                     return item;
                 })
             }
