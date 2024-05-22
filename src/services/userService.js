@@ -100,6 +100,43 @@ const getAllUsers = (userId) => {
     })
 }
 
+const register = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Check email exists
+            let check = await checkUserEmail(data.email);
+            if (check === true) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Your email has been used!'
+                })
+            }
+            else {
+                let hashPasswordFromBrcypt = await hashUserPassword(data.password);
+                // insert into user
+                await db.User.create({
+                    email: data.email,
+                    password: hashPasswordFromBrcypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phonenumber: data.phonenumber,
+                    gender: data.gender,
+                    roleId: process.env.ROLE_ID_PATIENT,
+                    positionId: process.env.POSITION_ID_PATIENT,
+                })
+                resolve({
+                    errCode: 0,
+                    message: 'Ok'
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -239,4 +276,5 @@ module.exports = {
     deleteUser: deleteUser,
     updateUserData: updateUserData,
     getAllCodeService: getAllCodeService,
+    register
 }

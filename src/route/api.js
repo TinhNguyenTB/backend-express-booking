@@ -12,6 +12,7 @@ let initApiRoutes = (app) => {
 
     router.post('/api/login', userController.handleLogin);
     router.get('/api/account', userController.getUserAccount);
+    router.post('/api/register', userController.handleRegister);
     router.post("/api/logout", userController.handleLogout);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
     router.post('/api/create-new-user', userController.handleCreateNewUser);

@@ -3,8 +3,6 @@ require('dotenv').config();
 import _ from 'lodash'
 import emailService from './emailService'
 
-const MAX_SCHEDULE_NUMBER = process.env.MAX_SCHEDULE_NUMBER;
-
 let getTopDoctorHome = (limit) => {
     return new Promise(async (resolve, reject) => {
         try {

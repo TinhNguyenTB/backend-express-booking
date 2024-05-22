@@ -31,60 +31,52 @@ const checkRequiredFileds = (inputData) => {
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let check = checkRequiredFileds(data);
-            if (check.isValid === false) {
-                resolve({
-                    errCode: 1,
-                    errMessage: `Missing required parameter ${check.element}`
-                })
-            }
-            else {
-                let [patient, created] = await db.Patient.findOrCreate({
-                    where: { email: data.email },
-                    defaults: {
-                        email: data.email,
-                        fullName: data.fullName,
-                        address: data.address,
-                        phonenumber: data.phoneNumber,
-                        gender: data.selectedGender
-                    }
-                })
-                // create a booking record
-                let token = uuidv4();
-                if (patient) {
-                    let [appointment, created] = await db.Booking.findOrCreate({
-                        where: { patientId: patient.id },
-                        defaults: {
-                            statusId: 'S1',
-                            doctorId: data.doctorId,
-                            patientId: patient.id,
-                            date: data.date,
-                            timeType: data.timeType,
-                            token: token,
-                            reason: data.reason
-                        }
-                    })
-                    if (created) {
-                        await emailService.sendSimpleEmail({
-                            receiverEmail: data.email,
-                            patientName: data.fullName,
-                            time: data.timeString,
-                            doctorName: data.doctorName,
-                            reason: data.reason,
-                            language: data.language,
-                            redirectLink: buildUrlEmail(data.doctorId, token)
-                        });
-                        resolve({
-                            errCode: 0,
-                            errMessage: "Create booking appointment succcessfully!"
-                        })
-                    }
+            let [patient, created] = await db.Patient.findOrCreate({
+                where: { email: data.email },
+                defaults: {
+                    email: data.email,
+                    fullName: data.fullName,
+                    address: data.address,
+                    phonenumber: data.phoneNumber,
+                    gender: data.selectedGender
                 }
-                resolve({
-                    errCode: 2,
-                    errMessage: "Save info patient failed!"
+            })
+            // create a booking record
+            let token = uuidv4();
+            if (patient) {
+                let [appointment, created] = await db.Booking.findOrCreate({
+                    where: { patientId: patient.id },
+                    defaults: {
+                        statusId: 'S1',
+                        doctorId: data.doctorId,
+                        patientId: patient.id,
+                        date: data.date,
+                        timeType: data.timeType,
+                        token: token,
+                        reason: data.reason
+                    }
                 })
+                if (created) {
+                    await emailService.sendSimpleEmail({
+                        receiverEmail: data.email,
+                        patientName: data.fullName,
+                        time: data.timeString,
+                        doctorName: data.doctorName,
+                        reason: data.reason,
+                        language: data.language,
+                        redirectLink: buildUrlEmail(data.doctorId, token)
+                    });
+                    resolve({
+                        errCode: 0,
+                        errMessage: "Create booking appointment succcessfully!"
+                    })
+                }
             }
+            resolve({
+                errCode: 2,
+                errMessage: "Save info patient failed!"
+            })
+
         } catch (error) {
             reject(error)
         }
