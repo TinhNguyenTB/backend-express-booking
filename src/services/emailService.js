@@ -62,7 +62,7 @@ const getBodyHTMLEmailRemedy = (dataSend) => {
     let result = ''
     if (dataSend.language === 'vi') {
         result = `
-        <h3>Xin chào ${dataSend.patientName}!</h3>
+        <h3>Xin chào ${dataSend.patientLastName} ${dataSend.patientFirstName}!</h3>
         <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên http://localhost:3000/ thành công.</p>
         <p>Thông tin đơn thuốc/hóa đơn được gửi trong file đính kèm.</p>
         <div>
@@ -72,7 +72,7 @@ const getBodyHTMLEmailRemedy = (dataSend) => {
     }
     else if (dataSend.language === 'en') {
         result = `
-        <h3>Dear ${dataSend.patientName}!</h3>
+        <h3>Dear ${dataSend.patientFirstName} ${dataSend.patientLastName}!</h3>
         <p>You received this email because you booked an online medical appointment on http://localhost:3000/ successfully.</p>
         <p>Prescription/invoice information is sent in the attached file.</p>
         <div>
@@ -87,7 +87,7 @@ const getBodyHTMLEmail = (dataSend) => {
     let result = ''
     if (dataSend.language === 'vi') {
         result = `
-        <h3>Xin chào ${dataSend.patientName}!</h3>
+        <h3>Xin chào ${dataSend.patientLastName} ${dataSend.patientFirstName}!</h3>
         <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên http://localhost:3000/</p>
         <p>Thông tin đặt lịch khám bệnh:</p>
         <div>
@@ -113,7 +113,7 @@ const getBodyHTMLEmail = (dataSend) => {
     }
     else if (dataSend.language === 'en') {
         result = `
-        <h3>Dear ${dataSend.patientName}!</h3>
+        <h3>Dear ${dataSend.patientFirstName} ${dataSend.patientLastName}!</h3>
         <p>You received this email because you booked an online medical appointment on http://localhost:3000/</p>
         <p>Information on scheduling medical examinations:</p>
         <div>

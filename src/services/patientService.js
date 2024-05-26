@@ -39,11 +39,12 @@ const postBookingAppointment = (data) => {
                 })
                 if (created) {
                     await emailService.sendSimpleEmail({
-                        receiverEmail: data.email,
-                        patientName: data.fullName,
+                        receiverEmail: data.patient.email,
+                        patientFirstName: data.patient.firstName,
+                        patientLastName: data.patient.lastName,
                         time: data.timeString,
                         doctorName: data.doctorName,
-                        reason: data.reason,
+                        reason: data.patient.reason,
                         language: data.language,
                         redirectLink: buildUrlEmail(data.doctorId, token)
                     });

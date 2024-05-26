@@ -357,9 +357,9 @@ const getListPatientForDoctor = (doctorId, date) => {
                     },
                     include: [
                         {
-                            model: db.Patient,
+                            model: db.User,
                             as: 'patientData',
-                            attributes: ['email', 'address', 'fullName', 'gender', 'phonenumber'],
+                            attributes: ['email', 'address', 'firstName', 'lastName', 'gender', 'phonenumber'],
                             include: [
                                 { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
                             ]

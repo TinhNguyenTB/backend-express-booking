@@ -120,7 +120,7 @@ const register = (data) => {
                     firstName: data.firstName,
                     lastName: data.lastName,
                     address: data.address,
-                    phonenumber: data.phonenumber,
+                    phonenumber: data.phoneNumber,
                     gender: data.gender,
                     roleId: process.env.ROLE_ID_PATIENT,
                     positionId: process.env.POSITION_ID_PATIENT,
