@@ -8,42 +8,23 @@ let buildUrlEmail = (doctorId, token) => {
     return result;
 }
 
-const checkRequiredFileds = (inputData) => {
-    let arrFileds = ['email', 'doctorId', 'date', 'timeType',
-        'fullName', 'selectedGender', 'address',
-        'phoneNumber', 'reason']
-
-    let isValid = true;
-    let element = '';
-    for (let i = 0; i < arrFileds.length; i++) {
-        if (!inputData[arrFileds[i]]) {
-            isValid = false;
-            element = arrFileds[i]
-            break;
-        }
-    }
-    return {
-        isValid,
-        element
-    }
-}
-
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let [patient, created] = await db.Patient.findOrCreate({
-                where: { email: data.email },
-                defaults: {
-                    email: data.email,
-                    fullName: data.fullName,
-                    address: data.address,
-                    phonenumber: data.phoneNumber,
-                    gender: data.selectedGender
-                }
-            })
+            // let [patient, created] = await db.Patient.findOrCreate({
+            //     where: { email: data.email },
+            //     defaults: {
+            //         email: data.email,
+            //         fullName: data.fullName,
+            //         address: data.address,
+            //         phonenumber: data.phoneNumber,
+            //         gender: data.selectedGender
+            //     }
+            // })
+
             // create a booking record
             let token = uuidv4();
-            if (patient) {
+            if (data.patient) {
                 let [appointment, created] = await db.Booking.findOrCreate({
                     where: { patientId: patient.id },
                     defaults: {
@@ -74,7 +55,7 @@ const postBookingAppointment = (data) => {
             }
             resolve({
                 errCode: 2,
-                errMessage: "Save info patient failed!"
+                errMessage: "Not found patient!"
             })
 
         } catch (error) {

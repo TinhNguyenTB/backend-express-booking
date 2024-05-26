@@ -2,7 +2,6 @@ require('dotenv').config();
 import nodemailer from "nodemailer";
 
 
-
 const sendSimpleEmail = async (dataSend) => {
 
     const transporter = nodemailer.createTransport({
