@@ -24,13 +24,13 @@ const postBookingAppointment = (data) => {
 
             // create a booking record
             let token = uuidv4();
-            if (data.patient) {
+            if (data) {
                 let [appointment, created] = await db.Booking.findOrCreate({
-                    where: { patientId: patient.id },
+                    where: { patientId: data.patientId },
                     defaults: {
                         statusId: 'S1',
                         doctorId: data.doctorId,
-                        patientId: patient.id,
+                        patientId: data.patientId,
                         date: data.date,
                         timeType: data.timeType,
                         token: token,
@@ -39,12 +39,12 @@ const postBookingAppointment = (data) => {
                 })
                 if (created) {
                     await emailService.sendSimpleEmail({
-                        receiverEmail: data.patient.email,
-                        patientFirstName: data.patient.firstName,
-                        patientLastName: data.patient.lastName,
+                        receiverEmail: data.email,
+                        patientFirstName: data.firstName,
+                        patientLastName: data.lastName,
                         time: data.timeString,
                         doctorName: data.doctorName,
-                        reason: data.patient.reason,
+                        reason: data.reason,
                         language: data.language,
                         redirectLink: buildUrlEmail(data.doctorId, token)
                     });
