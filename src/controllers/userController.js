@@ -11,13 +11,17 @@ let handleLogin = async (req, res) => {
         }
         let userData = await userService.handleUserLogin(email, password)
         if (userData && userData.token) {
-            res.cookie("token", userData.token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+            res.cookie("token", userData.token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+            return res.status(200).json({
+                errCode: 0,
+                errMessage: 'Ok',
+                data: userData
+            })
         }
         return res.status(200).json({
-            errCode: 0,
-            errMessage: 'Ok',
-            data: userData ? userData : {}
+            data: userData
         })
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -160,6 +164,19 @@ const handleRegister = async (req, res) => {
     }
 }
 
+const handleChangePassword = async (req, res) => {
+    try {
+        let data = await userService.changePassword(req.body);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     handleLogin,
     handleGetAllUsers,
@@ -169,5 +186,6 @@ module.exports = {
     getAllCode,
     getUserAccount,
     handleLogout,
-    handleRegister
+    handleRegister,
+    handleChangePassword
 }

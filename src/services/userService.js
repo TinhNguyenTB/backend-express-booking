@@ -269,6 +269,46 @@ const getAllCodeService = (typeInput) => {
     })
 }
 
+const changePassword = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.email || !data.password || !data.newPassword) {
+                resolve({
+                    errCode: 2,
+                    message: 'Missing required parameters!'
+                })
+            }
+            let user = await db.User.findOne({
+                where: { email: data.email },
+                raw: false
+            })
+            if (user) {
+                //compare password with password in db
+                let check = await bcrypt.compareSync(data.password, user.password)
+                if (check) {
+                    let hashPassword = await hashUserPassword(data.newPassword);
+                    user.password = hashPassword;
+                    await user.save();
+
+                    resolve({
+                        errCode: 0,
+                        message: 'Change password successfully!'
+                    })
+                }
+                else {
+                    resolve({
+                        errCode: 1,
+                        message: 'Your email or password is incorrect!'
+                    })
+                }
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUsers: getAllUsers,
@@ -276,5 +316,6 @@ module.exports = {
     deleteUser: deleteUser,
     updateUserData: updateUserData,
     getAllCodeService: getAllCodeService,
-    register
+    register,
+    changePassword
 }

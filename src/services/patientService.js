@@ -11,17 +11,6 @@ let buildUrlEmail = (doctorId, token) => {
 const postBookingAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // let [patient, created] = await db.Patient.findOrCreate({
-            //     where: { email: data.email },
-            //     defaults: {
-            //         email: data.email,
-            //         fullName: data.fullName,
-            //         address: data.address,
-            //         phonenumber: data.phoneNumber,
-            //         gender: data.selectedGender
-            //     }
-            // })
-
             // create a booking record
             let token = uuidv4();
             if (data) {
