@@ -309,40 +309,7 @@ const changePassword = (data) => {
     })
 }
 
-const getHistoriesById = (patientId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (!patientId) {
-                resolve({
-                    errCode: 2,
-                    message: 'Missing required parameters!'
-                })
-            }
-            else {
-                let appointments = await db.History.findAll({
-                    where: { patientId: patientId },
-                    include: [
-                        { model: db.User, as: 'appointmentData', attributes: ['firstName', 'lastName', 'email'] },
-                    ],
-                    raw: false,
-                    nest: true
-                })
-                if (appointments && appointments.length > 0) {
-                    appointments.map(item => {
-                        item.files = Buffer.from(item.files, 'base64').toString('binary');
-                        return item;
-                    })
-                }
-                resolve({
-                    errCode: 0,
-                    data: appointments
-                })
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
+
 
 module.exports = {
     handleUserLogin: handleUserLogin,
@@ -353,5 +320,5 @@ module.exports = {
     getAllCodeService: getAllCodeService,
     register,
     changePassword,
-    getHistoriesById
+
 }

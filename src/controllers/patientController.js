@@ -26,7 +26,49 @@ const postVerifyBookingAppointment = async (req, res) => {
     }
 }
 
+const getHistories = async (req, res) => {
+    try {
+        let data = await patientService.getHistoriesById(req.body.patientId);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+const getAppointment = async (req, res) => {
+    try {
+        let data = await patientService.getAppointmentById(req.query.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+const deleteAppointment = async (req, res) => {
+    try {
+        let data = await patientService.deleteAppointmentById(req.body.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     postBookingAppointment,
-    postVerifyBookingAppointment
+    postVerifyBookingAppointment,
+    getHistories,
+    getAppointment,
+    deleteAppointment
 }

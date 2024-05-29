@@ -4,6 +4,7 @@ import doctorController from '../controllers/doctorController';
 import specialtyController from '../controllers/specialtyController';
 import clinicController from '../controllers/clinicController';
 import { checkUserJWT } from '../middleware/jwtActions';
+import patientController from '../controllers/patientController';
 
 let router = express.Router();
 
@@ -19,7 +20,6 @@ let initApiRoutes = (app) => {
     router.post('/api/create-new-user', userController.handleCreateNewUser);
     router.put('/api/edit-user', userController.handleEditUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
-    router.post("/api/histories", userController.getHistories);
 
     router.get('/api/get-all-doctors', doctorController.getAllDoctor)
     router.post('/api/save-infor-doctors', doctorController.postInforDoctor)
@@ -34,6 +34,10 @@ let initApiRoutes = (app) => {
     router.post('/api/create-new-clinic', clinicController.createClinic)
     router.delete('/api/delete-clinic', clinicController.deleteClinic);
     router.put('/api/edit-clinic', clinicController.editClinic);
+
+    router.post("/api/histories", patientController.getHistories);
+    router.get("/api/appointment", patientController.getAppointment);
+    router.delete("/api/delete-appointment", patientController.deleteAppointment);
 
     return app.use("/", router);
 }

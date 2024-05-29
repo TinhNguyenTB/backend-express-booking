@@ -158,7 +158,7 @@ let getDetailDoctorById = (inputId) => {
                         exclude: ['password']  // not get password
                     },
                     include: [
-                        { model: db.Markdown, attributes: ['description', 'contentHTML', 'contentMarkdown'] },
+                        { model: db.Markdown, as: 'doctorInfoData', attributes: ['description', 'contentHTML', 'contentMarkdown'] },
                         { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
                         {
                             model: db.Doctor_Infor,
@@ -305,7 +305,7 @@ let getProfileDoctorById = async (doctorId) => {
                         exclude: ['password']  // not get password
                     },
                     include: [
-                        { model: db.Markdown, attributes: ['description', 'contentHTML', 'contentMarkdown'] },
+                        { model: db.Markdown, as: 'doctorInfoData', attributes: ['description', 'contentHTML', 'contentMarkdown'] },
                         { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
                         {
                             model: db.Doctor_Infor,

@@ -177,19 +177,6 @@ const handleChangePassword = async (req, res) => {
     }
 }
 
-const getHistories = async (req, res) => {
-    try {
-        let data = await userService.getHistoriesById(req.body.patientId);
-        return res.status(200).json(data);
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            errCode: -1,
-            errMessage: 'Error from server'
-        })
-    }
-}
-
 module.exports = {
     handleLogin,
     handleGetAllUsers,
@@ -201,5 +188,4 @@ module.exports = {
     handleLogout,
     handleRegister,
     handleChangePassword,
-    getHistories
 }

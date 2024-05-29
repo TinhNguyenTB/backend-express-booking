@@ -95,7 +95,101 @@ const postVerifyBookingAppointment = (data) => {
     })
 }
 
+const getHistoriesById = (patientId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!patientId) {
+                resolve({
+                    errCode: 2,
+                    message: 'Missing required parameters!'
+                })
+            }
+            else {
+                let appointments = await db.History.findAll({
+                    where: { patientId: patientId },
+                    include: [
+                        { model: db.User, as: 'appointmentData', attributes: ['firstName', 'lastName', 'email'] },
+                    ],
+                    raw: false,
+                    nest: true
+                })
+                if (appointments && appointments.length > 0) {
+                    appointments.map(item => {
+                        item.files = Buffer.from(item.files, 'base64').toString('binary');
+                        return item;
+                    })
+                }
+                resolve({
+                    errCode: 0,
+                    data: appointments
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+const getAppointmentById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            }
+            else {
+                let data = await db.Booking.findOne({
+                    where: { patientId: id },
+                    include: [
+                        { model: db.User, as: 'doctorInfo', attributes: ['firstName', 'lastName', 'email'] },
+                        { model: db.Allcode, as: 'statusData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.Allcode, as: 'timeTypeDataPatient', attributes: ['valueEn', 'valueVi'] }
+                    ],
+                    raw: false,
+                    nest: true
+                })
+
+                resolve({
+                    errCode: 0,
+                    data
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+const deleteAppointmentById = (patientId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!patientId) {
+                resolve({
+                    errCode: 2,
+                    message: 'Missing required parameters!'
+                })
+            }
+            else {
+                await db.Booking.destroy({
+                    where: { patientId: patientId }
+                })
+                resolve({
+                    errCode: 0,
+                    message: 'Delete appointment successfully!'
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     postBookingAppointment,
-    postVerifyBookingAppointment
+    postVerifyBookingAppointment,
+    getHistoriesById,
+    getAppointmentById,
+    deleteAppointmentById
 }
