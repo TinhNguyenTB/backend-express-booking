@@ -407,6 +407,7 @@ const sendRemedy = (data) => {
                     await db.History.create({
                         patientId: data.patientId,
                         doctorId: data.doctorId,
+                        statusId: 'S3',
                         reason: data.reason,
                         files: data.imgBase64
                     })

@@ -19,6 +19,7 @@ let initApiRoutes = (app) => {
     router.post('/api/create-new-user', userController.handleCreateNewUser);
     router.put('/api/edit-user', userController.handleEditUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
+    router.post("/api/histories", userController.getHistories);
 
     router.get('/api/get-all-doctors', doctorController.getAllDoctor)
     router.post('/api/save-infor-doctors', doctorController.postInforDoctor)

@@ -14,6 +14,9 @@ module.exports = {
             doctorId: {
                 type: Sequelize.INTEGER
             },
+            statusId: {
+                type: Sequelize.STRING
+            },
             reason: {
                 type: Sequelize.TEXT
             },
