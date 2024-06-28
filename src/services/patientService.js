@@ -130,6 +130,34 @@ const getHistoriesById = (patientId) => {
     })
 }
 
+const getAllHistories = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let histories = await db.History.findAll({
+                include: [
+                    { model: db.User, as: 'appointmentData', attributes: ['firstName', 'lastName', 'email'] },
+                ],
+                raw: false,
+                nest: true
+            })
+            if (histories && histories.length > 0) {
+                histories.map(item => {
+                    item.files = Buffer.from(item.files, 'base64').toString('binary');
+                    return item;
+                })
+            }
+            resolve({
+                errCode: 0,
+                data: histories
+            })
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+
 const getAppointmentById = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -191,5 +219,6 @@ module.exports = {
     postVerifyBookingAppointment,
     getHistoriesById,
     getAppointmentById,
-    deleteAppointmentById
+    deleteAppointmentById,
+    getAllHistories
 }

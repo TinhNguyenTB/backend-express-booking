@@ -52,6 +52,19 @@ const getAppointment = async (req, res) => {
     }
 }
 
+const getAllHistories = async (req, res) => {
+    try {
+        let data = await patientService.getAllHistories();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 const deleteAppointment = async (req, res) => {
     try {
         let data = await patientService.deleteAppointmentById(req.body.id);
@@ -70,5 +83,6 @@ module.exports = {
     postVerifyBookingAppointment,
     getHistories,
     getAppointment,
-    deleteAppointment
+    deleteAppointment,
+    getAllHistories
 }

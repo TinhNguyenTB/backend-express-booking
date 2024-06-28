@@ -57,6 +57,19 @@ const handleGetAllUsers = async (req, res) => {
     }
 }
 
+const handleGetUserById = async (req, res) => {
+    try {
+        let data = await userService.getUserById(req.query.id);
+        return res.status(200).json(data)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let handleCreateNewUser = async (req, res) => {
     try {
         let message = await userService.createNewUser(req.body);
@@ -188,4 +201,5 @@ module.exports = {
     handleLogout,
     handleRegister,
     handleChangePassword,
+    handleGetUserById
 }

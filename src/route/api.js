@@ -17,6 +17,7 @@ let initApiRoutes = (app) => {
     router.post('/api/change-password', userController.handleChangePassword);
     router.post("/api/logout", userController.handleLogout);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
+    router.get("/api/get-user-by-id", userController.handleGetUserById);
     router.post('/api/create-new-user', userController.handleCreateNewUser);
     router.put('/api/edit-user', userController.handleEditUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
@@ -36,6 +37,7 @@ let initApiRoutes = (app) => {
     router.put('/api/edit-clinic', clinicController.editClinic);
 
     router.post("/api/histories", patientController.getHistories);
+    router.get("/api/histories-all", patientController.getAllHistories);
     router.get("/api/appointment", patientController.getAppointment);
     router.delete("/api/delete-appointment", patientController.deleteAppointment);
 

@@ -100,6 +100,28 @@ const getAllUsers = (userId) => {
     })
 }
 
+const getUserById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = {}
+            if (id) {
+                user = await db.User.findOne({
+                    where: { id: id },
+                    attributes: {
+                        exclude: ['password', 'image', 'positionId', 'roleId']
+                    }
+                })
+            }
+            resolve({
+                errCode: 0,
+                data: user
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const register = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -320,5 +342,5 @@ module.exports = {
     getAllCodeService: getAllCodeService,
     register,
     changePassword,
-
+    getUserById
 }
